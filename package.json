@@ -1,0 +1,23 @@
+{
+  "name": "kiwijs-spike",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/miles-fitzsimons/kiwijs-spike.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/miles-fitzsimons/kiwijs-spike/issues"
+  },
+  "homepage": "https://github.com/miles-fitzsimons/kiwijs-spike#readme",
+  "dependencies": {
+    "body-parser": "^1.15.2",
+    "express": "^4.14.0"
+  }
+}
