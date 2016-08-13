@@ -8,52 +8,45 @@ TemplateGame.Play = new Kiwi.State( "Play" );
 * It is the state where majority of the functionality occurs 'in-game' occurs.
 */
 
-
 /**
 * This create method is executed when a Kiwi state has finished loading
 * any resources that were required to load.
 */
 TemplateGame.Play.create = function () {
+	this.background = new Kiwi.GameObjects.StaticImage (
+		this, this.textures['background'], 0, 0)
+
+	this.character = new Kiwi.GameObjects.Sprite (
+		this, this.textures['ninja'], 350, 330, true)
 
 	Kiwi.State.prototype.create.call( this );
 
 	/*
 	* Replace with your own game creation code here...
 	*/
-	this.name = new Kiwi.GameObjects.StaticImage(
-		this, this.textures.kiwiName, 10, 10) ;
 
-	this.heart = new Kiwi.GameObjects.Sprite(
-		this, this.textures.icons, 10, 10 );
-	this.heart.cellIndex = 8;
-	this.heart.y = this.game.stage.height - this.heart.height - 10;
+	this.leftKey = this.game.input.keyboard.addKey( Kiwi.Input.Keycodes.LEFT );
+	this.rightKey = this.game.input.keyboard.addKey( Kiwi.Input.Keycodes.RIGHT );
+	this.downKey = this.game.input.keyboard.addKey( Kiwi.Input.Keycodes.DOWN );
 
-
-	this.shield = new Kiwi.GameObjects.Sprite(
-		this, this.textures.icons, 200, 200 );
-	this.shield.cellIndex = 9;
-	this.shield.y = this.game.stage.height * 0.5 - this.shield.height * 0.5;
-	this.shield.x = this.game.stage.width * 0.5 - this.shield.width * 0.5;
-
-
-	this.crown = new Kiwi.GameObjects.Sprite(
-		this, this.textures.icons, 10, 10 );
-	this.crown.cellIndex = 10;
-	this.crown.x = this.game.stage.width - this.crown.width - 10;
-	this.crown.y = this.game.stage.height - this.crown.height - 10;
-
-
-	this.bomb = new Kiwi.GameObjects.Sprite(
-		this, this.textures.icons, 0, 10 );
-	this.bomb.x = this.game.stage.width - this.bomb.width  -10;
-
+	this.character.animation.add(
+		'idleright', [0], 0.1, false);
+	this.character.animation.add(
+		'crouchright', [1], 0.1, false);
+	this.character.animation.add(
+		'moveright', [2, 3, 4, 5, 6, 7], 0.1, true);
+	this.character.animation.add(
+		'idleleft', [8], 0.1, false);
+	this.character.animation.add(
+		'crouchleft', [9], 0.1, false);
+	this.character.animation.add(
+		'moveleft', [15, 14, 13, 12, 11, 10], 0.1, true);
+	this.facing = 'right';
+	this.character.animation.play('idleright');
 
 	// Add the GameObjects to the stage
-	this.addChild( this.heart );
-	this.addChild( this.crown );
-	this.addChild( this.shield );
-	this.addChild( this.bomb );
-	this.addChild( this.name );
+	this.addChild( this.background );
+	this.addChild( this.character );
 };
 
 
@@ -61,5 +54,35 @@ TemplateGame.Play.update = function() {
 
 	Kiwi.State.prototype.update.call( this );
 
-	this.shield.rotation += this.game.time.clock.rate * 0.01;
+	// Crouch
+	if (this.downKey.isDown) {
+		if (this.character.animation.currentAnimation.name !== 'crouch' + this.facing) {
+			this.character.animation.play('crouch' + this.facing)
+		}
+	}
+	// Walk left
+	else if (this.leftKey.isDown) {
+		this.facing = 'left'
+		if (this.character.transform.x > 3) {
+			this.character.transform.x -= 3
+		}
+		if (this.character.animation.currentAnimation.name !== 'moveleft') {
+			this.character.animation.play('moveleft')
+		}
+	}
+	// Walk right
+	else if (this.rightKey.isDown) {
+		this.facing = 'right'
+		if (this.character.transform.x < 600) {
+			this.character.transform.x += 3
+		}
+		if (this.character.animation.currentAnimation.name !== 'moveright') {
+			this.character.animation.play('moveright')
+		}
+	}
+	// Reset to idle standing
+	else if (this.character.animation.currentAnimation.name !== 'idle' + this.facing) {
+		this.character.animation.play('idle' + this.facing)
+	}
+
 };
