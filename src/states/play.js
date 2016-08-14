@@ -17,10 +17,11 @@ TemplateGame.Play.create = function () {
 		this, this.textures['background'], 0, 0)
 
 	this.character = new Kiwi.GameObjects.Sprite (
-		this, this.textures['ninja'], 350, 330, true)
+		this, this.textures['detective'], 350, 450, true)
 
 	Kiwi.State.prototype.create.call( this );
-
+	console.log('ffffff', this)
+	this.background.scaleToHeight(700)
 	/*
 	* Replace with your own game creation code here...
 	*/
@@ -28,13 +29,14 @@ TemplateGame.Play.create = function () {
 	this.leftKey = this.game.input.keyboard.addKey( Kiwi.Input.Keycodes.LEFT );
 	this.rightKey = this.game.input.keyboard.addKey( Kiwi.Input.Keycodes.RIGHT );
 	this.downKey = this.game.input.keyboard.addKey( Kiwi.Input.Keycodes.DOWN );
+	this.runKey = this.game.input.keyboard.addKey( Kiwi.Input.Keycodes.SPACEBAR )
 
 	this.character.animation.add(
-		'idleright', [0], 0.1, false);
+		'idleright', [7], 0.1, false);
+	// this.character.animation.add(
+	// 	'crouchright', [1], 0.1, false);
 	this.character.animation.add(
-		'crouchright', [1], 0.1, false);
-	this.character.animation.add(
-		'moveright', [2, 3, 4, 5, 6, 7], 0.1, true);
+		'moveright', [7, 0, 1, 2, 3, 4, 5, 6], 0.1, true);
 	this.character.animation.add(
 		'idleleft', [8], 0.1, false);
 	this.character.animation.add(
@@ -62,22 +64,32 @@ TemplateGame.Play.update = function() {
 	}
 	// Walk left
 	else if (this.leftKey.isDown) {
+		if (this.runKey.isDown) {
+			console.log('runnnn')
+		}
 		this.facing = 'left'
+		this.character.scaleX = -1
 		if (this.character.transform.x > 3) {
 			this.character.transform.x -= 3
 		}
 		if (this.character.animation.currentAnimation.name !== 'moveleft') {
-			this.character.animation.play('moveleft')
+			this.character.animation.play('moveright')
 		}
 	}
 	// Walk right
 	else if (this.rightKey.isDown) {
 		this.facing = 'right'
-		if (this.character.transform.x < 600) {
+		if (this.character.transform.x < 675) {
 			this.character.transform.x += 3
 		}
 		if (this.character.animation.currentAnimation.name !== 'moveright') {
 			this.character.animation.play('moveright')
+		}
+	}
+	// Run
+	else if (this.runKey.isDown) {
+		if (this.character.transform.x < 675) {
+			this.character.transform.x += 6
 		}
 	}
 	// Reset to idle standing

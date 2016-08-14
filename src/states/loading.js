@@ -45,6 +45,7 @@ TemplateGame.Loading.preload = function () {
 	**/
 	this.addImage('background', 'assets/img/jungle.png')
 	this.addSpriteSheet('ninja', 'assets/img/ninja.png', 150, 117)
+	this.addSpriteSheet('detective', 'assets/img/detective.png', 50, 90)
 	this.addImage( "kiwiName", "assets/img/kiwijs-name.png" );
 	this.addSpriteSheet( "icons", "assets/img/kiwijs-icons.png", 100, 90 );
 };
